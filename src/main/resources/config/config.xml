@@ -9,7 +9,7 @@
 0 - plain thresholding
 N - adaptive thresholding with radius N (must be greater or equal than 1)
 -->
-<entry key="photo_adaptivethresholdingradius">7</entry> <!-- thresholding mode -->
+<entry key="photo_adaptivethresholdingradius">-1</entry> <!-- thresholding mode -->
 
 <!-- SKEW DETECTION -->
 
@@ -70,7 +70,7 @@ characters must match with normalized characters width and height -->
 0 - euclidean distance pattern matching
 1 - feedforward neural network
 -->
-<entry key="intelligence_classification_method">1</entry> <!-- classification method. 0=euclidean distance pattern mathing, 1=neural network -->
+<entry key="intelligence_classification_method">0</entry> <!-- classification method. 0=euclidean distance pattern mathing, 1=neural network -->
 
 <!-- NEURAL NETWORK LEARNING PARAMETERS -->
 

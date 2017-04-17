@@ -15,7 +15,8 @@ public class JavaanprAdapter implements Target {
             intelligence = new Intelligence(false);
             recognizedText = intelligence.recognize(new CarSnapshot(image));
         } catch (Exception ex) {
-            Logger.getLogger(JavaanprAdapter.class.getName()).log(Level.SEVERE, null, ex);
+        	ex.printStackTrace();
+            System.out.println("Recognized exception.");
         }
         
         if(recognizedText == null || recognizedText.equals("")) {

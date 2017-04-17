@@ -237,68 +237,52 @@ public class TestFrame extends JFrame {
 		panel.setLayout(null);
 		toolBar.add(panel);
 		
-		image = new ImageIcon(TestFrame.class.getResource("/icons/txt.png"));
-		img = image.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-		
 		txtButton = new JButton("");
 		txtButton.setToolTipText("Load txt file");
-		txtButton.setBounds(3, 5, 20, 20);
-		txtButton.setPreferredSize(new Dimension(20, 20));
+		txtButton.setBounds(3, 4, 22, 22);
 		//txtButton.setFocusPainted(true);
 		txtButton.setContentAreaFilled(false);
 		txtButton.setBorderPainted(false);
-		txtButton.setIcon(new ImageIcon(img));
-		loadOriginalFileMenuItem.setIcon(new ImageIcon(img));
+		txtButton.setIcon(new ImageIcon(TestFrame.class.getResource("/icons/txt.png")));
+		loadOriginalFileMenuItem.setIcon(new ImageIcon(TestFrame.class.getResource("/icons/txt.png")));
 		panel.add(txtButton);
 		
 		imageButton = new JButton("");
 		imageButton.setToolTipText("Load images");
-		imageButton.setBounds(28, 5, 20, 20);
-		imageButton.setPreferredSize(new Dimension(20, 20));
+		imageButton.setBounds(29, 4, 22, 22);
 		//imageButton.setFocusPainted(true);
 		imageButton.setContentAreaFilled(false);
 		imageButton.setBorderPainted(false);
-		image = new ImageIcon(TestFrame.class.getResource("/icons/image3.png"));
-		img = image.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-		imageButton.setIcon(new ImageIcon(img));
-		loadImagesMenuItem.setIcon(new ImageIcon(img));
+		imageButton.setIcon(new ImageIcon(TestFrame.class.getResource("/icons/image3.png")));
+		loadImagesMenuItem.setIcon(new ImageIcon(TestFrame.class.getResource("/icons/image3.png")));
 		panel.add(imageButton);
 		
 		saveAsButton = new JButton("");
 		saveAsButton.setToolTipText("Save as...");
-		saveAsButton.setBounds(53, 5, 20, 20);
-		saveAsButton.setPreferredSize(new Dimension(20, 20));
+		saveAsButton.setBounds(55, 4, 22, 22);
 		//saveAsButton.setFocusPainted(true);
 		saveAsButton.setContentAreaFilled(false);
 		saveAsButton.setBorderPainted(false);
-		image = new ImageIcon(TestFrame.class.getResource("/icons/save3.png"));
-		img = image.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-		saveAsButton.setIcon(new ImageIcon(img));
-		saveAsMenuItem.setIcon(new ImageIcon(img));
+		saveAsButton.setIcon(new ImageIcon(TestFrame.class.getResource("/icons/save3.png")));
+		saveAsMenuItem.setIcon(new ImageIcon(TestFrame.class.getResource("/icons/save3.png")));
 		panel.add(saveAsButton);
 		
 		analyzeButton = new JButton("");
 		analyzeButton.setToolTipText("Analyse image");
-		analyzeButton.setBounds(128, 5, 20, 20);
-		analyzeButton.setPreferredSize(new Dimension(20, 20));
+		analyzeButton.setBounds(133, 4, 22, 22);
 		//analyzeButton.setFocusPainted(true);
 		analyzeButton.setContentAreaFilled(false);
 		analyzeButton.setBorderPainted(false);
-		image = new ImageIcon(TestFrame.class.getResource("/icons/play.png"));
-		img = image.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-		analyzeButton.setIcon(new ImageIcon(img));
+		analyzeButton.setIcon(new ImageIcon(TestFrame.class.getResource("/icons/play.png")));
 		panel.add(analyzeButton);
 		
 		analyzeAllButton = new JButton("");
 		analyzeAllButton.setToolTipText("Analyse all images");
-		analyzeAllButton.setBounds(153, 5, 20, 20);
-		analyzeAllButton.setPreferredSize(new Dimension(20, 20));
+		analyzeAllButton.setBounds(159, 4, 22, 22);
 		//analyzeAllButton.setFocusPainted(true);
 		analyzeAllButton.setContentAreaFilled(false);
 		analyzeAllButton.setBorderPainted(false);
-		image = new ImageIcon(TestFrame.class.getResource("/icons/playA2.png"));
-		img = image.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-		analyzeAllButton.setIcon(new ImageIcon(img));
+		analyzeAllButton.setIcon(new ImageIcon(TestFrame.class.getResource("/icons/playA2.png")));
 		panel.add(analyzeAllButton);
 		
 		JButton loadJarButton = new JButton("");
@@ -317,15 +301,12 @@ public class TestFrame extends JFrame {
 			}
 		});
 		loadJarButton.setToolTipText("Load jar file");
-		loadJarButton.setBounds(78, 5, 20, 20);
-		loadJarButton.setPreferredSize(new Dimension(20, 20));
+		loadJarButton.setBounds(81, 4, 22, 22);
 		//loadaJarButton.setFocusPainted(true);
 		loadJarButton.setContentAreaFilled(false);
 		loadJarButton.setBorderPainted(false);
-		image = new ImageIcon(TestFrame.class.getResource("/icons/jar.png"));
-		img = image.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-		loadJarButton.setIcon(new ImageIcon(img));
-		loadFrameworkMenuItem.setIcon(new ImageIcon(img));
+		loadJarButton.setIcon(new ImageIcon(TestFrame.class.getResource("/icons/jar.png")));
+		loadFrameworkMenuItem.setIcon(new ImageIcon(TestFrame.class.getResource("/icons/jar.png")));
 		panel.add(loadJarButton);
 		
 		JButton loadClassButton = new JButton("");
@@ -344,15 +325,12 @@ public class TestFrame extends JFrame {
 			}
 		});
 		loadClassButton.setToolTipText("Load adapter class file");
-		loadClassButton.setBounds(103, 5, 20, 20);
-		loadClassButton.setPreferredSize(new Dimension(20, 20));
+		loadClassButton.setBounds(107, 4, 22, 22);
 		//loadClassButton.setFocusPainted(true);
 		loadClassButton.setContentAreaFilled(false);
 		loadClassButton.setBorderPainted(false);
-		image = new ImageIcon(TestFrame.class.getResource("/icons/class.png"));
-		img = image.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-		loadClassButton.setIcon(new ImageIcon(img));
-		loadAdapterClassMenuItem.setIcon(new ImageIcon(img));
+		loadClassButton.setIcon(new ImageIcon(TestFrame.class.getResource("/icons/javaClass.png")));
+		loadAdapterClassMenuItem.setIcon(new ImageIcon(TestFrame.class.getResource("/icons/javaClass.png")));
 		panel.add(loadClassButton);
 			
 		separator = new JSeparator();
@@ -436,8 +414,8 @@ public class TestFrame extends JFrame {
 				int NUMBER_OF_UNRECOGNIZED = 0;
 
 				// instance = new TessAdapter();
-				//instance = new JavaanprAdapter();
-				instance = new PlateRecognizerAdapter();
+				instance = new JavaanprAdapter();
+				//instance = new PlateRecognizerAdapter();
 				//instance = new TCRNeurophAdapter();
 				// instance = new NeurophAdapter();
 
