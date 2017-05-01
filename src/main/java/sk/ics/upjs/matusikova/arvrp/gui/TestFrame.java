@@ -1,7 +1,6 @@
 package sk.ics.upjs.matusikova.arvrp.gui;
 
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Image;
 import javax.swing.JFrame;
@@ -10,13 +9,13 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import sk.ics.upjs.matusikova.arvrp.adapter.*;
 import sk.ics.upjs.matusikova.arvrp.analyzer.Analyzer;
-
 import javax.imageio.ImageIO;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListModel;
@@ -27,13 +26,13 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
-import java.lang.reflect.Method;
 import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.Properties;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -58,21 +57,18 @@ public class TestFrame extends JFrame {
 	private DefaultListModel<String> photoListModel;
 
 	private String photoDirPath;
-	private String frameworkPath;
 	private String photoPath;
 	private File chooserFile;
-
+	private File originalFile;
+	
 	private double percentage;
 	private int total_chars;
 	private int total_recognized_chars;
 	
-	private Class adapterClass;
-	private Method getLicensePlateMethod;
-	private Object adapterObject;
-	
-	private Target instance;
+	public Target instance = null;
 	private Analyzer analyzer;
-	private File originalFile;
+	private Enumeration enumer;
+	private Properties prop;
 	
 	private ImageIcon image;
 	private Image img;
@@ -110,6 +106,7 @@ public class TestFrame extends JFrame {
 		percentage = 0.0;
 		resultListModel = new DefaultListModel<String>();
 		photoListModel = new DefaultListModel<String>();
+		loadProperties();
 	}
 	
 	/**
@@ -117,11 +114,11 @@ public class TestFrame extends JFrame {
 	 * Initialize the contents of the frame.
 	 */
 	public TestFrame() {
-		setTitle("Recognition testing");
+		setTitle("License Plate Recognition Test");
 		setResizable(false);
 		init();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 726, 555);
+		setBounds(100, 100, 726, 562);
 
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(219, 229, 245));
@@ -140,9 +137,9 @@ public class TestFrame extends JFrame {
 		photosLabel.setBounds(10, 38, 190, 14);
 		contentPane.add(photosLabel);
 		
-		frameworkLabel = new JLabel("Framework");
+		frameworkLabel = new JLabel("Framework:");
 		frameworkLabel.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-		frameworkLabel.setBounds(210, 38, 72, 14);
+		frameworkLabel.setBounds(10, 492, 72, 14);
 		contentPane.add(frameworkLabel);
 		
 		resultsLabel = new JLabel("Results");
@@ -152,7 +149,8 @@ public class TestFrame extends JFrame {
 		contentPane.add(resultsLabel);
 		
 		choosenFrameworkLabel = new JLabel("");
-		choosenFrameworkLabel.setBounds(279, 38, 234, 14);
+		choosenFrameworkLabel.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		choosenFrameworkLabel.setBounds(75, 492, 234, 14);
 		contentPane.add(choosenFrameworkLabel);
 		
 		photoLabel = new JLabel("");
@@ -167,10 +165,6 @@ public class TestFrame extends JFrame {
 		loadImagesMenuItem = new JMenuItem("Load images");
 		
 		frameworkMenu = new JMenu("Framework");
-		
-		loadAdapterClassMenuItem = new JMenuItem("Load adapter class");
-		
-		loadFrameworkMenuItem = new JMenuItem("Load framework");
 		
 		helpMenu = new JMenu("Help");
 		
@@ -214,13 +208,25 @@ public class TestFrame extends JFrame {
 		fileMenu.add(exitMenuItem);
 
 		imageMenu.add(loadImagesMenuItem);
-		helpMenu.add(aboutMenuItem);	
+		helpMenu.add(aboutMenuItem);
 		
-		frameworkMenu.add(loadAdapterClassMenuItem);
-		frameworkMenu.add(loadFrameworkMenuItem);
-
-		helpMenu.add(helpMenuItem);
-			
+		selectAdapterMenu = new JMenu("Select adapter");
+		
+		frameworkMenu.add(selectAdapterMenu);
+		image = new ImageIcon(TestFrame.class.getResource("/icons/javaClass.png"));
+		img = image.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+		selectAdapterMenu.setIcon(new ImageIcon(img));
+	    
+		JMenuItem pole[] = new JMenuItem[prop.size()];
+		enumer = prop.propertyNames();
+		for(int i = 0; i < prop.size(); i++) {
+	      String key = (String) enumer.nextElement();
+	      pole[i] = new JMenuItem(new Action(key, this));
+	      selectAdapterMenu.add(pole[i]);
+	    }
+		
+	    
+		helpMenu.add(helpMenuItem);	
 		menuBar.add(fileMenu);
 		menuBar.add(imageMenu);
 		menuBar.add(frameworkMenu);
@@ -240,7 +246,6 @@ public class TestFrame extends JFrame {
 		txtButton = new JButton("");
 		txtButton.setToolTipText("Load txt file");
 		txtButton.setBounds(3, 4, 22, 22);
-		//txtButton.setFocusPainted(true);
 		txtButton.setContentAreaFilled(false);
 		txtButton.setBorderPainted(false);
 		txtButton.setIcon(new ImageIcon(TestFrame.class.getResource("/icons/txt.png")));
@@ -250,7 +255,6 @@ public class TestFrame extends JFrame {
 		imageButton = new JButton("");
 		imageButton.setToolTipText("Load images");
 		imageButton.setBounds(29, 4, 22, 22);
-		//imageButton.setFocusPainted(true);
 		imageButton.setContentAreaFilled(false);
 		imageButton.setBorderPainted(false);
 		imageButton.setIcon(new ImageIcon(TestFrame.class.getResource("/icons/image3.png")));
@@ -260,7 +264,6 @@ public class TestFrame extends JFrame {
 		saveAsButton = new JButton("");
 		saveAsButton.setToolTipText("Save as...");
 		saveAsButton.setBounds(55, 4, 22, 22);
-		//saveAsButton.setFocusPainted(true);
 		saveAsButton.setContentAreaFilled(false);
 		saveAsButton.setBorderPainted(false);
 		saveAsButton.setIcon(new ImageIcon(TestFrame.class.getResource("/icons/save3.png")));
@@ -269,8 +272,7 @@ public class TestFrame extends JFrame {
 		
 		analyzeButton = new JButton("");
 		analyzeButton.setToolTipText("Analyse image");
-		analyzeButton.setBounds(133, 4, 22, 22);
-		//analyzeButton.setFocusPainted(true);
+		analyzeButton.setBounds(81, 4, 22, 22);
 		analyzeButton.setContentAreaFilled(false);
 		analyzeButton.setBorderPainted(false);
 		analyzeButton.setIcon(new ImageIcon(TestFrame.class.getResource("/icons/play.png")));
@@ -278,68 +280,24 @@ public class TestFrame extends JFrame {
 		
 		analyzeAllButton = new JButton("");
 		analyzeAllButton.setToolTipText("Analyse all images");
-		analyzeAllButton.setBounds(159, 4, 22, 22);
-		//analyzeAllButton.setFocusPainted(true);
+		analyzeAllButton.setBounds(107, 4, 22, 22);
 		analyzeAllButton.setContentAreaFilled(false);
 		analyzeAllButton.setBorderPainted(false);
 		analyzeAllButton.setIcon(new ImageIcon(TestFrame.class.getResource("/icons/playA2.png")));
 		panel.add(analyzeAllButton);
-		
-		JButton loadJarButton = new JButton("");
-		loadJarButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-				filter = new FileNameExtensionFilter("Jar Files", "jar");
-				fileChooser.setFileFilter(filter);
-				fileChooser.showOpenDialog((Component) arg0.getSource());	
-				chooserFile = fileChooser.getSelectedFile();
-				
-				if(chooserFile != null) {
-					frameworkPath = chooserFile.getAbsolutePath();
-					loadLibrary(frameworkPath);
-				}
-			}
-		});
-		loadJarButton.setToolTipText("Load jar file");
-		loadJarButton.setBounds(81, 4, 22, 22);
-		//loadaJarButton.setFocusPainted(true);
-		loadJarButton.setContentAreaFilled(false);
-		loadJarButton.setBorderPainted(false);
-		loadJarButton.setIcon(new ImageIcon(TestFrame.class.getResource("/icons/jar.png")));
-		loadFrameworkMenuItem.setIcon(new ImageIcon(TestFrame.class.getResource("/icons/jar.png")));
-		panel.add(loadJarButton);
-		
-		JButton loadClassButton = new JButton("");
-		loadClassButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-				filter = new FileNameExtensionFilter("Java Files", "java");
-				fileChooser.setFileFilter(filter);
-				fileChooser.showOpenDialog((Component) e.getSource());
-				chooserFile = fileChooser.getSelectedFile();
-				
-				if(chooserFile != null) {
-					String classPath = chooserFile.getAbsolutePath();
-					loadClass(classPath);	
-				}
-			}
-		});
-		loadClassButton.setToolTipText("Load adapter class file");
-		loadClassButton.setBounds(107, 4, 22, 22);
-		//loadClassButton.setFocusPainted(true);
-		loadClassButton.setContentAreaFilled(false);
-		loadClassButton.setBorderPainted(false);
-		loadClassButton.setIcon(new ImageIcon(TestFrame.class.getResource("/icons/javaClass.png")));
-		loadAdapterClassMenuItem.setIcon(new ImageIcon(TestFrame.class.getResource("/icons/javaClass.png")));
-		panel.add(loadClassButton);
 			
 		separator = new JSeparator();
-		separator.setBounds(0, 488, 720, 1);
+		separator.setBounds(0, 485, 720, 1);
 		contentPane.add(separator);
+		
+		JLabel lblCopyrightcLucia = new JLabel("Copyright (c) Lucia Matusikova 2017");
+		lblCopyrightcLucia.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+		lblCopyrightcLucia.setBounds(511, 492, 199, 14);
+		contentPane.add(lblCopyrightcLucia);
 				
 		/**
 		 * Application actions.
-		 */
+		 */		
 		txtButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -390,20 +348,22 @@ public class TestFrame extends JFrame {
 		analyzeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				long start = System.currentTimeMillis();
-				// instance = new TessAdapter();
-				instance = new JavaanprAdapter();
-				// instance = new PlateRecognizerAdapter();
-				//instance = new AspriseOcrAdapter();
-				//instance = new CAdapter();
-				// instance = new TCRNeurophAdapter();
-				// instance = new OpenErpAdapter();
-				// instance = new NeurophAdapter();
-				String result = instance.getLicensePlate(bufferedImg, photoPath);
-				long end = System.currentTimeMillis();
-				String resultString = photoList.getSelectedValue() + "   " + result + "   " + (end-start) + " miliseconds";		
-				resultListModel.addElement(resultString);
-				resultsList.setModel(resultListModel);
-						
+				
+				if((photoListModel.size() != 0) && (originalFile != null)) {
+					String result = instance.getLicensePlate(bufferedImg, photoPath);
+					long end = System.currentTimeMillis();
+					String resultString = photoList.getSelectedValue() + "   " + result + "   " + (end-start) + " miliseconds";		
+					resultListModel.addElement(resultString);
+					resultsList.setModel(resultListModel);
+		
+				} else {
+					if(photoListModel.size() == 0) {
+						JOptionPane.showMessageDialog(null, "You didn't choose any photo directory.", "Error", JOptionPane.ERROR_MESSAGE);
+					}
+					else if(originalFile == null) {
+						JOptionPane.showMessageDialog(null, "You didn't choose any text file.", "Error", JOptionPane.ERROR_MESSAGE);
+					}
+				}		
 			}
 		});
 				
@@ -413,17 +373,11 @@ public class TestFrame extends JFrame {
 				int NUMBER_OF_RECOGNIZED = 0;
 				int NUMBER_OF_UNRECOGNIZED = 0;
 
-				// instance = new TessAdapter();
-				instance = new JavaanprAdapter();
-				//instance = new PlateRecognizerAdapter();
-				//instance = new TCRNeurophAdapter();
-				// instance = new NeurophAdapter();
-
+				if((photoListModel.size() != 0) && (originalFile != null)) {
 				Scanner s = null;
 
 					try {
 						s = new Scanner(originalFile);
-						System.out.println("Original txt file >> " + originalFile.toString());
 					} catch (FileNotFoundException ex) {
 						Logger.getLogger(TestFrame.class.getName()).log(Level.SEVERE, null, ex);
 					}
@@ -442,7 +396,7 @@ public class TestFrame extends JFrame {
 					long start2 = System.currentTimeMillis();
 					String result = instance.getLicensePlate(bufferedImg, photo);
 					long end2 = System.currentTimeMillis();
-							
+
 					if ((("UNRECOGNIZED").equals(result))) {
 						percentage = 0;
 						NUMBER_OF_UNRECOGNIZED++;
@@ -474,12 +428,20 @@ public class TestFrame extends JFrame {
 						long end = System.currentTimeMillis();
 						long time = end - start;
 						recognitionList.add(
-										"Recognized successful in " + time + "miliseconds / " + (time / 1000) + "seconds.");
+										"Recognized successful in " + time + " miliseconds / " + (time / 1000) + " seconds.");
 								recognitionList.add("Recognized: " + NUMBER_OF_RECOGNIZED + " of "
 										+ (NUMBER_OF_RECOGNIZED + NUMBER_OF_UNRECOGNIZED) + " -> "
 										+ ((NUMBER_OF_RECOGNIZED * 100) / (NUMBER_OF_RECOGNIZED + NUMBER_OF_UNRECOGNIZED))
 										+ "%");
 								recognitionList.add("Total chars: " + total_chars + ", recognized: " + total_recognized_chars);
+					}
+				}
+				} else {
+					if(photoListModel.size() == 0) {
+						JOptionPane.showMessageDialog(null, "You didn't choose any photo directory.", "Error", JOptionPane.ERROR_MESSAGE);
+					}
+					else if(originalFile == null) {
+						JOptionPane.showMessageDialog(null, "You didn't choose any text file.", "Error", JOptionPane.ERROR_MESSAGE);
 					}
 				}
 			}
@@ -520,36 +482,6 @@ public class TestFrame extends JFrame {
 				}
 			}
 		});
-		
-		loadAdapterClassMenuItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-				filter = new FileNameExtensionFilter("Java Files", "java");
-				fileChooser.setFileFilter(filter);
-				fileChooser.showOpenDialog((Component) e.getSource());
-				chooserFile = fileChooser.getSelectedFile();
-				
-				if(chooserFile != null) {
-					String classPath = chooserFile.getAbsolutePath();
-					loadClass(classPath);	
-				}
-			}
-		});
-
-		loadFrameworkMenuItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-				filter = new FileNameExtensionFilter("Jar Files", "jar");
-				fileChooser.setFileFilter(filter);
-				fileChooser.showOpenDialog((Component) e.getSource());	
-				chooserFile = fileChooser.getSelectedFile();
-				
-				if(chooserFile != null) {
-					frameworkPath = chooserFile.getAbsolutePath();
-					loadLibrary(frameworkPath);
-				}
-			}
-		});
 
 		loadImagesMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -561,13 +493,15 @@ public class TestFrame extends JFrame {
 					resultListModel.clear();
 					photoLabel.setIcon(new ImageIcon());		
 				}
-
+				
 				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				filter = new FileNameExtensionFilter("Image directory", "All files");
+				fileChooser.setFileFilter(filter);
 				fileChooser.showOpenDialog((Component) e.getSource());
 				loadPhotos();
 			}
 		});
-
+		
 		photoList.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -575,69 +509,20 @@ public class TestFrame extends JFrame {
 					displayPhoto();
 				}
 			}
-		});
-		
+		});	
 	}
 	
-
 	/**
 	 * Other methods.
+	 * @throws MalformedURLException 
 	 */
-	private void loadClass(String classPath) {
-		URL myAdapterClass = null;
-		System.out.println(classPath);
-		
-		try {
-			myAdapterClass = new URL("file", "", classPath);
-		} catch (MalformedURLException e2) {
-			e2.printStackTrace();
-		}
-			
-		URLClassLoader cl = URLClassLoader.newInstance(new URL[]{myAdapterClass});
-		
-		try {			
-			adapterClass = cl.getSystemClassLoader().loadClass("sk.ics.upjs.matusikova.arvrp.adapter.JavaanprAdapter");
-			getLicensePlateMethod = adapterClass.getMethod("getLicensePlate", new Class[] {BufferedImage.class, String.class});
-			adapterObject = adapterClass.newInstance();
-		} catch (ClassNotFoundException | IllegalAccessException | InstantiationException | NoSuchMethodException | SecurityException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}	
-	}
-	
-	private void loadLibrary(String libraryPath) {
-		File jar = new File(libraryPath);
-		
-		try {
-            URLClassLoader loader = (java.net.URLClassLoader)ClassLoader.getSystemClassLoader();
-            URL url = jar.toURI().toURL();
-            System.out.println(url);
-
-            for (java.net.URL it : java.util.Arrays.asList(loader.getURLs())){
-                if (it.equals(url)){
-                    return;
-                }
-            }  
-            java.lang.reflect.Method method = URLClassLoader.class.getDeclaredMethod("addURL", new Class[]{java.net.URL.class});
-            System.out.println(method);
-            method.setAccessible(true);
-            method.invoke(loader, new Object[]{url});
-        } catch (final java.lang.NoSuchMethodException | 
-            java.lang.IllegalAccessException | 
-            java.net.MalformedURLException | 
-            java.lang.reflect.InvocationTargetException e2){
-        	e2.printStackTrace();
-            
-        }
-	}
-	
 	private void loadPhotos() {
 		int index = 0;
 
 		chooserFile = fileChooser.getSelectedFile();
 		if(chooserFile != null) {
 		setPhotoDirPath(chooserFile.getPath());
-		recognitionList.add(getPhotoDirPath());
+		recognitionList.add("Directory path: " + getPhotoDirPath());
 		File directory = new File(getPhotoDirPath());
 
 		for (String file : directory.list()) {
@@ -691,6 +576,32 @@ public class TestFrame extends JFrame {
 		}
 	}
 	
+	private void loadProperties() {
+		prop = new Properties();
+    	InputStream input = null;
+
+    	try {
+    		String filename = "config.properties";
+    		input = TestFrame.class.getClassLoader().getResourceAsStream(filename);
+    		if(input==null){
+    	        System.out.println("Sorry, unable to find " + filename);
+    		    return;
+    		}
+    		
+    		prop.load(input);
+    	} catch (IOException ex) {
+    		ex.printStackTrace();
+        } finally{
+        	if(input!=null){
+        		try {
+				input.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+        	}
+        }
+	}
+	
 	// Variables declaration - do not modify 
 	private JPanel contentPane;
 	private JMenuBar menuBar;
@@ -703,8 +614,6 @@ public class TestFrame extends JFrame {
 	private JMenuItem loadImagesMenuItem;
 	private JMenuItem exitMenuItem;
 	private JMenu frameworkMenu;
-	private JMenuItem loadAdapterClassMenuItem;
-	private JMenuItem loadFrameworkMenuItem;
 	private JMenu helpMenu;
 	private JMenuItem helpMenuItem;
 	private JMenuItem aboutMenuItem;
@@ -723,4 +632,5 @@ public class TestFrame extends JFrame {
 	private JButton analyzeAllButton;
 	private JPanel panel;
 	private JToolBar toolBar;
+	private JMenu selectAdapterMenu;
 }

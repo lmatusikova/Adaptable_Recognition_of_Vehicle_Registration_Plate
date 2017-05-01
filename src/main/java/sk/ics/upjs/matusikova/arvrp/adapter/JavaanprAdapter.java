@@ -1,8 +1,6 @@
 package sk.ics.upjs.matusikova.arvrp.adapter;
 
 import java.awt.image.BufferedImage;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javaanpr.imageanalysis.CarSnapshot;
 import javaanpr.intelligence.Intelligence;
 
@@ -26,14 +24,10 @@ public class JavaanprAdapter implements Target {
     }
 
     public String getFrameworkName() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       return "Javaanpr";
     }
 
     public String getFrameworkDescription() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public String getPath() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }  
+       return "Recognition plate library";
+    } 
 }
