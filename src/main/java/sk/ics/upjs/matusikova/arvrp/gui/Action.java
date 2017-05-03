@@ -8,11 +8,15 @@ import javax.swing.AbstractAction;
 import sk.ics.upjs.matusikova.arvrp.adapter.Target;
 
 public class Action extends AbstractAction{
-
-	private Class adapterClass;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5017720778730194098L;
+	private Class<?> adapterClass;
 	private Target instance = null;
 	private TestFrame frame;
 	private String text;
+	private ClassLoader cl;
 	
 	public Action(String text, TestFrame frame)
     {
@@ -29,13 +33,14 @@ public class Action extends AbstractAction{
 	
 	private Target loadClass(URL url, String name) {
 	    URL[] urls = new URL[]{url};
-		ClassLoader cl = new URLClassLoader(urls);
+		cl = new URLClassLoader(urls);
 
 		try {			
 			adapterClass = cl.loadClass("sk.ics.upjs.matusikova.arvrp.adapter."+name);
 			instance = (Target) adapterClass.newInstance();
-			System.out.println(instance);
-			System.out.println(instance.toString());
+			frame.choosenFrameworkLabel.setText(name);
+			frame.resultListModel.clear();
+			
 		} catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SecurityException e1) {
 			e1.printStackTrace();
 		}

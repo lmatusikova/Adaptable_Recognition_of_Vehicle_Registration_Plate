@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <style>
+      body {font-family:tahoma; font-size:12; color:#444444}
+      p {margin-left:20; margin-top:0; margin-right:20}
+      p.left {text-align:left}
+      p.justify {text-align:justify}
+      p.right {text-align:right}
+      p.code {text-align:left;font-family:times}
+      a {color:black}
+      a:hover {color:red}
+  </style>
+</head>
+<body>
+	<div>
+	<center><h3>License Plate Recognition Test</h3></center>
+	</div>
+	
+	<div>
+		<center><h4>How to test ?</h4></center>	
+	</div>
+	
+	<div>
+		<ol>
+  			<li>Load images from the given directory</li><br>
+  				<p>Only images with following suffixes are allowed:</p>
+  					<ul><li><i>jpg, JPG, png, PNG</i></li></ul>
+  			
+  			<li>Load text file, which contains original license plate numbers</li><br>
+  				<p>Format of text file</p>
+  				<ul><li>image name,     original license plate numbers</li></ul>
+  				
+  				<p>Example:</p><br>
+  				<p>image_1.jpg     PO123KL</p>
+  				<p>test8.png     KK358LL</p><br>
+  				
+  				<p>Image name must contains suffix!</p><br>
+			
+			<li>Select the adapter you want to use for testing</li><br>
+				<p>You can choose from these adapters:</p>
+				<i><ul><li>Javaanpr adapter</li></ul>
+			    <ul><li>PlateRecognizer adapter</li></ul>
+			    <ul><li>OpenCV 3 License Plate Recognition adapter (RecognitionCpp adapter)</li></ul></i>
+			   
+			<li>Start analysis</li><br>
+				<p>The results will be displayed below</p><br>
+			
+			<li>Then you can save the recognition results to the given text file</li><br>
+				<p>Text file contains:</p>
+				<i><ul><li>path to the directory</li></ul>
+				<ul><li>image name, recognized characters, percentage</li></ul>
+				<ul><li>total number of recognized plates with percentage</li></ul>
+				<ul><li>total number of recognized characters with percentage</li></ul></i>
+		</ol>		
+	</div>
+	<div>
+		<center><h4>About adapters</h4></center>	
+	</div>
+	<div>
+		<ol>
+			<li>Javaanpr</li>
+			
+				<p>Location of config.xml:
+				>> Project folder >> 
+				</p>
+				
+				<p>For working with this library, you must set paths of following entries in <i>config.xml</i></p>
+				<ul><li>char_learnAlphabetPath</li></ul>
+				<ul><li>char_neuralNetworkPath</li></ul>
+				<ul><li>intelligence_syntaxDescriptionFile</li></ul>
+				
+				<p>You can set properties in the <i>config.xml</i> file located in the resources directory, such as:</p>
+				<ul><li>intelligence_classification_method</li></ul>
+		 		<ul><li>thresholding mode</li></ul>
+				<ul><li>and more...</li></ul>
+
+				
+				
+			<li>PlateRecognizer</li>
+			<li>OpenCV 3 License Plate Recognition adapter (RecognitionCpp adapter)</li><br>
+				<p>You must set the <b>PATH</b> system variable to the <i>lib</i> directory in the project</p>
+		</ol>
+	</div>
+	
+</body>
+</html>

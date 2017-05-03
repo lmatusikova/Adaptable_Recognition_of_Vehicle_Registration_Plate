@@ -70,7 +70,7 @@ characters must match with normalized characters width and height -->
 0 - euclidean distance pattern matching
 1 - feedforward neural network
 -->
-<entry key="intelligence_classification_method">0</entry> <!-- classification method. 0=euclidean distance pattern mathing, 1=neural network -->
+<entry key="intelligence_classification_method">1</entry> <!-- classification method. 0=euclidean distance pattern mathing, 1=neural network -->
 
 <!-- NEURAL NETWORK LEARNING PARAMETERS -->
 
