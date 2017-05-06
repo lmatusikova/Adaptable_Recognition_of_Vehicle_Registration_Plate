@@ -52,7 +52,7 @@ N - adaptive thresholding with radius N (must be greater or equal than 1)
 
 <!-- path to directory containing already normalized characters. Dimensions of these
 characters must match with normalized characters width and height -->
-<entry key="char_learnAlphabetPath">C:\\Users\\Freya\\workspace\\ARVRP\\src\\main\\resources\\alphabets\\alphabet_8x13</entry>
+<entry key="char_learnAlphabetPath">./resources/alphabets/alphabet_8x13</entry>
 
 <!-- character downsampling methods 
 0 - linear resampling (good for preserving edges (edge detection))
@@ -70,11 +70,11 @@ characters must match with normalized characters width and height -->
 0 - euclidean distance pattern matching
 1 - feedforward neural network
 -->
-<entry key="intelligence_classification_method">1</entry> <!-- classification method. 0=euclidean distance pattern mathing, 1=neural network -->
+<entry key="intelligence_classification_method">0</entry> <!-- classification method. 0=euclidean distance pattern mathing, 1=neural network -->
 
 <!-- NEURAL NETWORK LEARNING PARAMETERS -->
 
-<entry key="char_neuralNetworkPath">C:\\Users\\Freya\\workspace\\ARVRP\\src\\main\\resources\\neuralnetworks\\network_avgres_813_map.xml</entry> <!-- neural network topology file (caution : dimensions must match with selected extraction method) -->
+<entry key="char_neuralNetworkPath">./resources/neuralnetworks/network_avgres_813_map.xml</entry> <!-- neural network topology file (caution : dimensions must match with selected extraction method) -->
 <entry key="neural_maxk">8000</entry> <!-- maximum number of iterations during learning process -->
 <entry key="neural_eps">0.07</entry> <!-- expected error ratio -->
 <entry key="neural_lambda">0.05</entry> <!-- lambda factor : speed of convergence -->
@@ -89,7 +89,7 @@ characters must match with normalized characters width and height -->
 2 - correct characters anyway (eliminate redundant characters)
 -->
 <entry key="intelligence_syntaxanalysis">2</entry> <!-- syntax analysis mode -->
-<entry key="intelligence_syntaxDescriptionFile">C:\\Users\\Freya\\workspace\\ARVRP\\src\\main\\resources\\syntax\\syntax.xml</entry>
+<entry key="intelligence_syntaxDescriptionFile">./resources/syntax/syntax.xml</entry>
 
 <!-- CAR SNAPSHOT, BAND, PLATE GRAPH ANALYSIS -->
 
