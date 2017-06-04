@@ -12,7 +12,7 @@ public class AnalyzerTest {
 	@Test
 	public void test() {
 		analyzer = new Analyzer("PO123KL", "PP127KJ");
-		int result = analyzer.analyze();
+		int result = analyzer.analyse();
 		Assert.assertEquals(4, result);
 	}
 

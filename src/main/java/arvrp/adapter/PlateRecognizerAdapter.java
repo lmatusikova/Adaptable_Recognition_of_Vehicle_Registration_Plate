@@ -4,25 +4,44 @@ import com.ragerant.platerecognizer.PlateRecognizer;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
-public class PlateRecognizerAdapter implements Target{
+public class PlateRecognizerAdapter implements Target {
 
-    public String getLicensePlate(BufferedImage image, String path) {
-        File img = new File(path);
-        String recognizedText = "";
-        recognizedText = PlateRecognizer.recognize(img);
-        if(recognizedText == null || recognizedText.equals("")) {
-            recognizedText = "UNRECOGNIZED";
-        } 
-        
-        return recognizedText;
+	/**
+	 * Method for obtaining characters from license plate
+	 * 
+	 * @param image
+	 *            given image
+	 * @param path
+	 *            path to the given image
+	 * @return recognized characters
+	 */
+	public String getLicensePlate(BufferedImage image, String path) {
+		File img = new File(path);
+		String recognizedText = "";
+		recognizedText = PlateRecognizer.recognize(img);
+		if (recognizedText == null || recognizedText.equals("")) {
+			recognizedText = "UNRECOGNIZED";
+		}
 
-    }
+		return recognizedText;
 
-    public String getFrameworkName() {
-    	return "PlateRecognizer";
-    }
+	}
 
-    public String getFrameworkDescription() {
-    	return "Recognition plate library";
-    }
+	/**
+	 * Get framework name
+	 * 
+	 * @return framework name
+	 */
+	public String getFrameworkName() {
+		return "PlateRecognizer";
+	}
+
+	/**
+	 * Get framework description
+	 * 
+	 * @return framework description
+	 */
+	public String getFrameworkDescription() {
+		return "Recognition plate library";
+	}
 }

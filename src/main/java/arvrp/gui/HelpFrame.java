@@ -11,12 +11,9 @@ import javax.swing.JScrollPane;
 
 public class HelpFrame extends JFrame {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 2302078282580481904L;
 	private JPanel contentPane;
-	
+
 	/**
 	 * Launch the application.
 	 */
@@ -45,26 +42,28 @@ public class HelpFrame extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+
 		scrollPane = new JScrollPane();
 		scrollPane.setBounds(0, 0, 494, 362);
 		contentPane.add(scrollPane);
 		editorPane = new JEditorPane();
-		
+
 		editorPane.setEditable(false);
 		URL helpURL = HelpFrame.class.getResource("/help.html");
-		
+
 		try {
 
-		    editorPane.setPage(helpURL);
-	
+			editorPane.setPage(helpURL);
+
 		} catch (IOException e) {
-		    System.err.println("Attempted to read a bad URL: " + helpURL);
+			System.err.println("Attempted to read a bad URL: " + helpURL);
 		}
-		
-		scrollPane.setViewportView(editorPane);		
-	}	
-	
+
+		scrollPane.setViewportView(editorPane);
+	}
+
+	// Variables declaration - do not modify
 	private JScrollPane scrollPane;
 	private JEditorPane editorPane;
+	// End of variables declaration
 }

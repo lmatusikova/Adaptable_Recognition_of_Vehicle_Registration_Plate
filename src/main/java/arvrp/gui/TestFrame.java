@@ -7,10 +7,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
-
 import arvrp.adapter.*;
 import arvrp.analyzer.Analyzer;
-
 import javax.imageio.ImageIO;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
@@ -30,9 +28,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
-import java.lang.reflect.Method;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -50,7 +45,7 @@ import java.awt.Font;
 public class TestFrame extends JFrame {
 
 	private static final long serialVersionUID = 3603963437186164619L;
-	
+
 	private JFileChooser fileChooser;
 	private BufferedImage bufferedImg;
 	private FileNameExtensionFilter filter;
@@ -92,16 +87,27 @@ public class TestFrame extends JFrame {
 		});
 	}
 
+	/**
+	 * Getter
+	 * 
+	 * @return path to image directory
+	 */
 	public String getPhotoDirPath() {
 		return photoDirPath;
 	}
 
+	/**
+	 * Setter
+	 * 
+	 * @param photoDirPath
+	 *            path to image directory
+	 */
 	public void setPhotoDirPath(String photoDirPath) {
 		this.photoDirPath = photoDirPath;
 	}
 
 	/**
-	 * Initialize other.
+	 * Initialize objects.
 	 */
 	private void init() {
 		fileChooser = new JFileChooser();
@@ -304,14 +310,10 @@ public class TestFrame extends JFrame {
 
 		aboutMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-				fileChooser.showOpenDialog((Component) e.getSource());
-				String path = fileChooser.getSelectedFile().getPath();
-				loadLibrary(new File(path));
-				
+				// nothing
 			}
 		});
-		
+
 		txtButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -405,11 +407,11 @@ public class TestFrame extends JFrame {
 					JOptionPane.showMessageDialog(null, "You didn't choose any adapter.", "Error",
 							JOptionPane.ERROR_MESSAGE);
 				} else {
-					
-					if(!recognitionList.isEmpty()) {
+
+					if (!recognitionList.isEmpty()) {
 						recognitionList.clear();
 					}
-					
+
 					if ((photoListModel.size() != 0) && (originalFile != null)) {
 						Scanner s = null;
 
@@ -445,7 +447,7 @@ public class TestFrame extends JFrame {
 								String original_plate = s.next();
 								total_chars = total_chars + original_plate.length();
 								analyzer = new Analyzer(original_plate, result);
-								recognized_chars = analyzer.analyze();
+								recognized_chars = analyzer.analyse();
 								percentage = (recognized_chars * 100) / original_plate.length();
 								total_recognized_chars = total_recognized_chars + recognized_chars;
 
@@ -608,7 +610,9 @@ public class TestFrame extends JFrame {
 
 	/**
 	 * Write recognition result to the file.
+	 * 
 	 * @param path
+	 *            path to the given file
 	 */
 	private void writeResultToFile(String path) {
 		PrintWriter pw = null;
@@ -656,34 +660,6 @@ public class TestFrame extends JFrame {
 			}
 		}
 	}
-	
-	public synchronized void loadLibrary(File jar) {
-        try {
-            /*We are using reflection here to circumvent encapsulation; addURL is not public*/
-            URLClassLoader loader = (URLClassLoader)ClassLoader.getSystemClassLoader();
-           // URL url = new URL("jar", "", "file:"+jar.getAbsolutePath());
-            
-            URL url = jar.toURI().toURL();
-            System.out.println(url);
-            /*Disallow if already loaded*/
-            for (java.net.URL it : java.util.Arrays.asList(loader.getURLs())){
-                if (it.equals(url)){
-                	System.out.println("som tu");
-                    return;
-                }
-            }
-            Class<URLClassLoader> sysClass = URLClassLoader.class;
-            Method method = sysClass.getDeclaredMethod("addURL", new Class[]{URL.class});
-            method.setAccessible(true); /*promote the method to public access*/
-            method.invoke(loader, new Object[]{url});
-
-        } catch (final java.lang.NoSuchMethodException | 
-            java.lang.IllegalAccessException | 
-            java.net.MalformedURLException | 
-            java.lang.reflect.InvocationTargetException e){
-            System.out.println("Daco sa posralo");
-        }
-    }
 
 	// Variables declaration - do not modify
 	private JPanel contentPane;
@@ -718,5 +694,5 @@ public class TestFrame extends JFrame {
 	private JMenu selectAdapterMenu;
 	private JMenuItem buttonField[];
 	private JLabel lblCopyrightcLucia;
-	// End of variables declaration 
+	// End of variables declaration
 }
